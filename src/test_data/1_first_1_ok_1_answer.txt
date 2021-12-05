@@ -1,0 +1,4 @@
+﻿before>after>
+before: \n
+after: \r\n
+sed "s/\\\\n/\\\\r\\\\n/g"
