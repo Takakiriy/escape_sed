@@ -1,4 +1,4 @@
-# __app__
+# escape_sed
 
 `app` command is ____.
 
@@ -6,7 +6,7 @@
 
 <!-- TOC depthFrom:1 -->
 
-- [__app__](#app)
+- [escape_sed](#escape_sed)
   - [How to use](#how-to-use)
   - [Install](#install)
     - [For Windows](#for-windows)
@@ -23,14 +23,14 @@
 
 ## How to use
 
-Install __app__ and then run it in your shell.
+Install escape_sed and then run it in your shell.
 
-    __app__  __Path__
+    escape_sed  __Path__
 
 
 ## Install
 
-To use __app__, you must install Node.js.
+To use escape_sed, you must install Node.js.
 
 ### For Windows
 
@@ -44,26 +44,26 @@ To use __app__, you must install Node.js.
             - npm config -g set proxy "http://___.___.___.___:____"
             - npm config -g set https-proxy "http://___.___.___.___:____"
 
-    Download and expand __app__ and install Node.js packages used by __app__:
+    Download and expand escape_sed and install Node.js packages used by escape_sed:
         Windows Start >> (Input) PowerShell :
             cd  ${env:USERPROFILE}\Downloads
-            Invoke-WebRequest  https://github.com/Takakiriy/__app__/archive/refs/heads/master.zip -OutFile __app__.zip
-            rm -r -fo  "__app__-master"  #// When you are updating
-            Expand-Archive -Path __app__.zip -DestinationPath "."
-            cd  "__app__-master"
+            Invoke-WebRequest  https://github.com/Takakiriy/escape_sed/archive/refs/heads/master.zip -OutFile escape_sed.zip
+            rm -r -fo  "escape_sed-master"  #// When you are updating
+            Expand-Archive -Path escape_sed.zip -DestinationPath "."
+            cd  "escape_sed-master"
 
             npm install --only=production
 
     If you use PowerShell:
-        Create a PS1 script file that launches __app__ into the folder where PATH of PowerShell:
+        Create a PS1 script file that launches escape_sed into the folder where PATH of PowerShell:
             Windows Start >> (Input) PowerShell :
-                cd  ${env:USERPROFILE}\Downloads\__app__-master
+                cd  ${env:USERPROFILE}\Downloads\escape_sed-master
                 ${current_folder} = Convert-Path "."
-                ${__app___folder} = "${env:USERPROFILE}\Documents\__app__"
-                ${script} = "${env:USERPROFILE}\AppData\Local\Microsoft\WindowsApps\__app__.ps1"
+                ${escape_sed_folder} = "${env:USERPROFILE}\Documents\escape_sed"
+                ${script} = "${env:USERPROFILE}\AppData\Local\Microsoft\WindowsApps\escape_sed.ps1"
 
                 echo  "`${env:NODE_PATH} = `"${current_folder}\node_modules`"" > ${script}
-                echo  "node  ${current_folder}\build\__app__.js `$PsBoundParameters.Values `$args" >> ${script}
+                echo  "node  ${current_folder}\build\escape_sed.js `$PsBoundParameters.Values `$args" >> ${script}
 
                 Set-ExecutionPolicy  RemoteSigned  -Scope CurrentUser  #// Make the script run
 
@@ -74,20 +74,20 @@ To use __app__, you must install Node.js.
             - Press Next button 8 times
             - Configuring the line ending conversions: Checkout as-is, commit as-is
             - Other installation options are defaults
-        Create a bash script file that launches __app__ into the folder where PATH passed:
+        Create a bash script file that launches escape_sed into the folder where PATH passed:
             Right click at any folder >> Git bash :
-                cd  ${HOME}/Downloads/__app__-master
+                cd  ${HOME}/Downloads/escape_sed-master
                 current_folder="$(pwd)"
-                __app___folder="${HOME}/Documents/__app__"
-                script="${HOME}/bin/__app__"
+                escape_sed_folder="${HOME}/Documents/escape_sed"
+                script="${HOME}/bin/escape_sed"
                 mkdir -p "${HOME}/bin"
 
                 echo  "export NODE_PATH=\"${HOME}/AppData/Roaming/npm/node_modules\"" > ${script}
-                echo  "node  ${current_folder}/build/__app__.js \"\$@\"" >> ${script}
+                echo  "node  ${current_folder}/build/escape_sed.js \"\$@\"" >> ${script}
 
-    Check to use __app__ command:
+    Check to use escape_sed command:
         Open new PowerShell or new Git bash:
-            __app__ --version
+            escape_sed --version
 
 ### For mac
 
@@ -96,30 +96,30 @@ To use __app__, you must install Node.js.
         - Open the downloaded file (e.g. node-v14.16.0.pkg)
         - Installation options are defaults
 
-    Download and expand __app__ and install Node.js packages used by __app__:
+    Download and expand escape_sed and install Node.js packages used by escape_sed:
         #// Launchpad >> Terminal
         cd  ~/Downloads
         setopt interactivecomments
             #// enables comment symbol (#)
-        curl -o __app__.zip -kL https://github.com/Takakiriy/__app__/archive/refs/heads/master.zip 
-        rm -rf  __app__-old  &&  mv  __app__  __app__-old  #// When you are updating
-        unzip -o __app__.zip
-        mv  __app__-master  __app__  #// The folder extracted from the Zip file
-        cd  __app__
+        curl -o escape_sed.zip -kL https://github.com/Takakiriy/escape_sed/archive/refs/heads/master.zip 
+        rm -rf  escape_sed-old  &&  mv  escape_sed  escape_sed-old  #// When you are updating
+        unzip -o escape_sed.zip
+        mv  escape_sed-master  escape_sed  #// The folder extracted from the Zip file
+        cd  escape_sed
 
         npm install --only=production
 
-    Make the script file in the PATH folder to start __app__:
-        cd __app__  #// The folder extracted from the Zip file
-        script="$HOME/bin/__app__"
+    Make the script file in the PATH folder to start escape_sed:
+        cd escape_sed  #// The folder extracted from the Zip file
+        script="$HOME/bin/escape_sed"
         rm -f "${script}"  #// When you are updating
         echo "export  NODE_PATH=$(pwd)/node_modules" >> "${script}"
-        echo "node  $(pwd)/build/__app__.js \"\$@\"" >> "${script}"
+        echo "node  $(pwd)/build/escape_sed.js \"\$@\"" >> "${script}"
         chmod +x "${script}"
         unset script
 
-    Check to use __app__ command:
-        __app__ --version
+    Check to use escape_sed command:
+        escape_sed --version
 
 
 ## (for developers) How to build the development environment
