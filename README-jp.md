@@ -1,7 +1,7 @@
 # escape_sed
 <!-- Character Encoding: "WHITE SQUARE" U+25A1 is □. -->
 
-`app` コマンドは、____です。
+`escape_sed` コマンドは、sed コマンドに指定するパラメーターを表示します。
 
 <!-- TOC depthFrom:1 -->
 
@@ -24,7 +24,14 @@
 
 escape_sed をインストールしてから、シェルで実行します。
 
-    escape_sed  __Path__
+    $ escape_sed
+    lineNum>12
+    before>ab
+    after>cd
+    # line: 12
+    # before: ab
+    # after:  cd
+    _c="$(sed "12 s/ab/cd/g"  "${file_path}" )";  echo "$_c" > "${file_path}";  unset _c
 
 
 ## インストール

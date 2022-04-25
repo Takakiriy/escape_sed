@@ -10,16 +10,21 @@ export async function  main() {
         locale = programOptions.locale;
     }
 
+    let  lineNum = await lib.input('lineNum>');
     let  before = await lib.input('before>');
     let  after = await lib.input('after>');
     console.log('');
-    console.log(`before: ${before}`);
-    console.log(`after: ${after}`);
+    if (lineNum) {
+        console.log(`# line: ${lineNum}`);
+        lineNum += ' ';
+    }
+    console.log(`# before: ${before}`);
+    console.log(`# after:  ${after}`);
 
     before = escapeBefore(before);
     after = escapeAfter(after);
 
-    console.log(`sed "s/${before}/${after}/g"`);
+    console.log(`_c="$(sed "${lineNum}s/${before}/${after}/g"  "\${file_path}" )";  echo "$_c" > "\${file_path}";  unset _c`);
 }
 
 // escapeBefore

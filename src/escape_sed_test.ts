@@ -26,12 +26,13 @@ async function  TestOfFirst() {
     // Test Main
     returns = await callChildProccess(`node ${scriptPath} --test --locale en-US`,
         {inputLines: [
+			'12',
             '\\n',
             '\\r\\n'
         ]}
     );
     const  answer = fs.readFileSync(testFolderPath + "1_first_1_ok_1_answer.txt")
-        .toString().substr(cutBOM);
+        .toString().substring(cutBOM);
 
     // Check
     if (returns.stdout !== answer) {

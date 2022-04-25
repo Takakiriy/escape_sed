@@ -4,6 +4,17 @@ export declare function copyFolderSync(sourceFolderPath: string, destinationFold
 export declare function copyFileSync(sourceFilePath: string, destinationFilePath: string): void;
 export declare function getFullPath(relativePath: string, basePath: string): string;
 export declare function getHomePath(): string;
+export declare class InputOption {
+    inputLines: string[];
+    nextLineIndex: number;
+    nextParameterIndex: number;
+    constructor(inputLines: string[]);
+}
+export declare function input(guide: string): Promise<string>;
+export declare function inputPath(guide: string): Promise<string>;
+export declare function inputSkip(count: number): void;
+export declare function setInputEchoBack(isEnabled: boolean): void;
+export declare function getInputEchoBack(): boolean;
 declare class StandardInputBuffer {
     readlines: readline.Interface | undefined;
     inputBuffer: string[];
@@ -12,14 +23,11 @@ declare class StandardInputBuffer {
     input(guide: string): Promise<string>;
     close(): void;
 }
-export declare function input(guide: string): Promise<string>;
 export declare function getInputObject(): StandardInputBuffer;
-export declare function inputPath(guide: string): Promise<string>;
-export declare function inputSkip(count: number): void;
 export declare function pathResolve(path_: string): string;
 export declare function checkNotInGitWorking(): void;
 export declare function getTestWorkFolderFullPath(): string;
-export declare function getSnapshot(label: string): any;
+export declare function getSnapshot(label: string, deafultSnapshot?: string | undefined): any;
 export declare function pp(message: any): string[];
 export declare const debugOut: string[];
 export declare function cc(targetCount?: number, label?: string): {

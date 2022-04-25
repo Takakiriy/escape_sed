@@ -1,4 +1,5 @@
-before>after>
-before: \n
-after: \r\n
-sed "s/\\\\n/\\\\r\\\\n/g"
+lineNum>before>after>
+# line: 12
+# before: \n
+# after: \r\n
+_c="$(sed "12 s/\\\\n/\\\\r\\\\n/g"  "${file_path}" )";  echo "$_c" > "${file_path}";  unset _c

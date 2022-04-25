@@ -6,9 +6,10 @@ try {
     var snapshots = require("./__snapshots__/main.test.ts.snap");
 } catch (e) {
 }
+// File group
 
 // copyFolderSync
-// #keyword: copyFolderSync
+// #keyword: lib.ts copyFolderSync
 // sourceFolder/1.txt => destinationFolderPath/1.txt
 export async function  copyFolderSync(sourceFolderPath: string, destinationFolderPath: string) {
     const  currentFolderPath = process.cwd();
@@ -26,7 +27,7 @@ export async function  copyFolderSync(sourceFolderPath: string, destinationFolde
 }
 
 // copyFileSync
-// #keyword: copyFileSync
+// #keyword: lib.ts copyFileSync
 // This also makes the copy target folder.
 export function  copyFileSync(sourceFilePath: string, destinationFilePath: string) {
 	const  destinationFolderPath = path.dirname(destinationFilePath);
@@ -36,7 +37,7 @@ export function  copyFileSync(sourceFilePath: string, destinationFilePath: strin
 }
 
 // getFullPath
-// #keyword: JavaScript (js) library getFullPath
+// #keyword: lib.ts JavaScript (js) library getFullPath
 // If "basePath" is current directory, you can call "path.resolve"
 // If the variable has full path and litteral relative path, write `${___FullPath}/relative_path}`
 export function  getFullPath(relativePath: string, basePath: string): string {
@@ -46,9 +47,9 @@ export function  getFullPath(relativePath: string, basePath: string): string {
     const  slashFirstIndex = slashRelativePath.indexOf('/');
     const  withProtocol = (colonSlashIndex + 1 === slashFirstIndex);  // e.g.) C:/, http://
 
-    if (relativePath.substr(0,1) === '/') {
+    if (relativePath[0] === '/') {
         fullPath = relativePath;
-    } else if (relativePath.substr(0,1) === '~') {
+    } else if (relativePath[0] === '~') {
         fullPath = relativePath.replace('~', getHomePath() );
     } else if (withProtocol) {
         fullPath = relativePath;
@@ -59,7 +60,7 @@ export function  getFullPath(relativePath: string, basePath: string): string {
 }
 
 // getHomePath
-// #keyword: getHomePath
+// #keyword: lib.ts getHomePath
 export function  getHomePath(): string {
     if (process.env.HOME) {
         return  process.env.HOME;
@@ -70,58 +71,9 @@ export function  getHomePath(): string {
     }
 }
 
-// StandardInputBuffer
-class  StandardInputBuffer {
-    readlines: readline.Interface | undefined;
-    inputBuffer: string[] = [];
-    inputResolver?: (answer:string)=>void = undefined;
-
-    delayedConstructor() {  // It is not constructor, because "createInterface" stops the program, if stdin was not used.
-        this.readlines = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        });
-        this.readlines.on('line', async (line: string) => {
-            if (this.inputResolver) {
-                this.inputResolver(line);
-                this.inputResolver = undefined;
-            } else {
-                this.inputBuffer.push(line);
-            }
-        });
-
-        this.readlines.setPrompt('');
-        this.readlines.prompt();
-    }
-
-    async  input(guide: string): Promise<string> {
-        if (!this.readlines) {
-            this.delayedConstructor();
-        }
-
-        return  new Promise(
-            (resolve: (answer:string)=>void,  reject: (answer:string)=>void ) =>
-        {
-            const  nextLine = this.inputBuffer.shift();
-            if (nextLine) {
-                console.log(guide + nextLine);
-                resolve(nextLine);
-            } else {
-                process.stdout.write(guide);
-                this.inputResolver = resolve;
-            }
-        });
-    }
-
-    close() {
-        if (this.readlines) {
-            this.readlines.close();
-        }
-    }
-}
 
 // InputOption
-class InputOption {
+export class InputOption {
     inputLines: string[];
     nextLineIndex: number;
     nextParameterIndex: number;  // The index of the starting process parameters
@@ -144,6 +96,7 @@ const inputOption = new InputOption([
 ]);
 
 // input
+// #keyword: lib.ts input
 // Example: const name = await input('What is your name? ');
 export async function  input( guide: string ): Promise<string> {
     // Input emulation
@@ -161,7 +114,7 @@ export async function  input( guide: string ): Promise<string> {
     while (inputOption.nextParameterIndex < process.argv.length) {
         const  value = process.argv[inputOption.nextParameterIndex];
         inputOption.nextParameterIndex += 1;
-        if (value.substr(0,1) !== '-') {
+        if (value.substring(0,1) !== '-') {
             console.log(guide + value);
 
             return  value;
@@ -173,10 +126,6 @@ export async function  input( guide: string ): Promise<string> {
 
     // input
     return  InputObject.input(guide);
-}
-const  InputObject = new StandardInputBuffer();
-export function  getInputObject(): StandardInputBuffer {
-    return  InputObject;
 }
 
 // inputPath
@@ -193,6 +142,74 @@ export async function  inputPath( guide: string ) {
 // inputSkip
 export function  inputSkip(count: number) {
     inputOption.nextParameterIndex += count;
+}
+
+// setInputEchoBack
+export function setInputEchoBack(isEnabled: boolean) {
+    inputEchoBack = isEnabled;
+}
+var  inputEchoBack = false;
+
+// getInputEchoBack
+export function getInputEchoBack(): boolean {
+    return  inputEchoBack;
+}
+
+// StandardInputBuffer
+class  StandardInputBuffer {
+    readlines: readline.Interface | undefined;
+    inputBuffer: string[] = [];
+    inputResolver?: (answer:string)=>void = undefined;
+
+    delayedConstructor() {  // It is not constructor, because "createInterface" stops the program, if stdin was not used.
+        this.readlines = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+        this.readlines.on('line', async (line: string) => {
+            if (this.inputResolver) {
+                if (inputEchoBack) {
+                    console.log(line);
+                }
+                this.inputResolver(line);  // inputResolver() is resolve() in input()
+                this.inputResolver = undefined;
+            } else {
+                this.inputBuffer.push(line);
+            }
+        });
+
+        this.readlines.setPrompt('');
+        this.readlines.prompt();
+    }
+
+    async  input(guide: string): Promise<string> {
+        if (!this.readlines) {
+            this.delayedConstructor();
+        }
+
+        return  new Promise(
+            (resolve: (answer:string)=>void,  reject: (answer:string)=>void ) =>
+        {
+            const  nextLine = this.inputBuffer.shift();
+            if (typeof nextLine === 'string') {
+                console.log(guide + nextLine);
+                resolve(nextLine);
+            } else {  // nextLine === undefnied
+                process.stdout.write(guide);
+                this.inputResolver = resolve;
+            }
+        });
+    }
+
+    close() {
+        if (this.readlines) {
+            this.readlines.close();
+        }
+    }
+}
+const  InputObject = new StandardInputBuffer();
+export function  getInputObject(): StandardInputBuffer {
+    return  InputObject;
 }
 
 // pathResolve
@@ -245,22 +262,28 @@ export function  getTestWorkFolderFullPath(): string {
 }
 
 // getSnapshot
-export function  getSnapshot(label: string) {
+export function  getSnapshot(label: string, deafultSnapshot: string | undefined = undefined) {
     if ( ! (label in snapshots)) {
-        throw  new Error(`not found snapshot label "${label}" in "__Project__/src/__snapshots__/main.test.ts.snap" file.`)
+        if ( ! deafultSnapshot) {
+            throw  new Error(`not found snapshot label "${label}" in "__Project__/src/__snapshots__/main.test.ts.snap" file.`);
+        }
+        return  deafultSnapshot;
     }
     const  snapshot = snapshots[label];
-    return  snapshot.substr(2, snapshot.length - 4).replace('\\"', '"');
+    return  snapshot.substr(2, snapshot.length - 4).replace(/\\\"/g, '"');
 }
 
 // pp
 // Debug print.
-// #keyword: pp
+// #keyword: lib.ts pp
 // Example:
 //    pp(var);
 // Example:
 //    var d = pp(var);
 //    d = d;  // Set break point here and watch the variable d
+// Example:
+//    var d = ppClear();
+//    pp(var);
 // Example:
 //    try {
 //
@@ -270,17 +293,36 @@ export function  getSnapshot(label: string) {
 //        d = [];  // Set break point here and watch the variable d
 //    }
 export function  pp(message: any) {
-    if (typeof message === 'object') {
-        message = JSON.stringify(message);
+    if (message instanceof Array) {
+        debugOut.push(`length: ${message.length}`);
+        for (const element of message) {
+            pp(element);
+        }
+    } else {
+        if (typeof message === 'object') {
+            if (message instanceof Map) {
+                const  messageObject = Object.create(null);
+                for (let [k,v] of message) {
+                    messageObject[k] = v;
+                }
+                message = JSON.stringify(messageObject, null, '    ');
+            } else {
+                message = JSON.stringify(message, null, '    ');
+            }
+        } else if (message === undefined) {
+            message = '(undefined)';
+        } else if (message === null) {
+            message = '(null)';
+        }
+        debugOut.push(message.toString());
     }
-    debugOut.push(message.toString());
     return debugOut;
 }
 export const  debugOut: string[] = [];
 
 // cc
 // Through counter.
-// #keyword: cc
+// #keyword: lib.ts cc
 // Example:
 //   cc();
 // Example:

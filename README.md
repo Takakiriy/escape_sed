@@ -1,6 +1,6 @@
 # escape_sed
 
-`app` command is ____.
+The `escape_sed` command displays the parameters you specify for the sed command.
 
 [日本語 README](./README-jp.md)
 
@@ -25,7 +25,14 @@
 
 Install escape_sed and then run it in your shell.
 
-    escape_sed  __Path__
+    $ escape_sed
+    lineNum>12
+    before>ab
+    after>cd
+    # line: 12
+    # before: ab
+    # after:  cd
+    _c="$(sed "12 s/ab/cd/g"  "${file_path}" )";  echo "$_c" > "${file_path}";  unset _c
 
 
 ## Install
