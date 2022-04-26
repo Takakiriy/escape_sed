@@ -28,6 +28,7 @@ escape_sed をインストールしてから、シェルで実行します。
     lineNum>12
     before>ab
     after>cd
+
     # line: 12
     # before: ab
     # after:  cd
