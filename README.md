@@ -11,6 +11,7 @@ The `escape_sed` command displays the parameters you specify for the sed command
   - [Install](#install)
     - [For Windows](#for-windows)
     - [For mac](#for-mac)
+    - [For CentOS 7](#for-centos-7)
   - [(for developers) How to build the development environment](#for-developers-how-to-build-the-development-environment)
     - [For Windows](#for-windows-1)
     - [For mac](#for-mac-1)
@@ -26,9 +27,10 @@ The `escape_sed` command displays the parameters you specify for the sed command
 Install escape_sed and then run it in your shell.
 
     $ escape_sed
-    lineNum>12
-    before>ab
-    after>cd
+    lineNum> 12
+    before> ab
+    after > cd
+
     # line: 12
     # before: ab
     # after:  cd
@@ -53,10 +55,10 @@ To use escape_sed, you must install Node.js.
 
     Download and expand escape_sed and install Node.js packages used by escape_sed:
         Windows Start >> (Input) PowerShell :
-            cd  ${env:USERPROFILE}\Downloads
-            Invoke-WebRequest  https://github.com/Takakiriy/escape_sed/archive/refs/heads/master.zip -OutFile escape_sed.zip
-            rm -r -fo  "escape_sed-master"  #// When you are updating
-            Expand-Archive -Path escape_sed.zip -DestinationPath "."
+            cd  "${env:USERPROFILE}\Downloads"
+            Invoke-WebRequest  https://github.com/Takakiriy/escape_sed/archive/refs/heads/master.zip -OutFile "escape_sed.zip"
+            rm -r -fo  "escape_sed-master"  #// No need to run when installing for the first time
+            Expand-Archive -Path "escape_sed.zip"  -DestinationPath "."
             cd  "escape_sed-master"
 
             npm install --only=production
@@ -64,10 +66,10 @@ To use escape_sed, you must install Node.js.
     If you use PowerShell:
         Create a PS1 script file that launches escape_sed into the folder where PATH of PowerShell:
             Windows Start >> (Input) PowerShell :
+                ${script} = "${env:USERPROFILE}\AppData\Local\Microsoft\WindowsApps\escape_sed.ps1"
                 cd  ${env:USERPROFILE}\Downloads\escape_sed-master
                 ${current_folder} = Convert-Path "."
                 ${escape_sed_folder} = "${env:USERPROFILE}\Documents\escape_sed"
-                ${script} = "${env:USERPROFILE}\AppData\Local\Microsoft\WindowsApps\escape_sed.ps1"
 
                 echo  "`${env:NODE_PATH} = `"${current_folder}\node_modules`"" > ${script}
                 echo  "node  ${current_folder}\build\escape_sed.js `$PsBoundParameters.Values `$args" >> ${script}
@@ -83,13 +85,12 @@ To use escape_sed, you must install Node.js.
             - Other installation options are defaults
         Create a bash script file that launches escape_sed into the folder where PATH passed:
             Right click at any folder >> Git bash :
+                script="${HOME}/bin/escape_sed"
                 cd  ${HOME}/Downloads/escape_sed-master
                 current_folder="$(pwd)"
-                escape_sed_folder="${HOME}/Documents/escape_sed"
-                script="${HOME}/bin/escape_sed"
                 mkdir -p "${HOME}/bin"
 
-                echo  "export NODE_PATH=\"${HOME}/AppData/Roaming/npm/node_modules\"" > ${script}
+                echo  "export  NODE_PATH=\"${HOME}/AppData/Roaming/npm/node_modules\"" > ${script}
                 echo  "node  ${current_folder}/build/escape_sed.js \"\$@\"" >> ${script}
 
     Check to use escape_sed command:
@@ -105,24 +106,72 @@ To use escape_sed, you must install Node.js.
 
     Download and expand escape_sed and install Node.js packages used by escape_sed:
         #// Launchpad >> Terminal
-        cd  ~/Downloads
+        cd  "${HOME}/Downloads"
         setopt interactivecomments
             #// enables comment symbol (#)
-        curl -o escape_sed.zip -kL https://github.com/Takakiriy/escape_sed/archive/refs/heads/master.zip 
-        rm -rf  escape_sed-old  &&  mv  escape_sed  escape_sed-old  #// When you are updating
+        curl -o "escape_sed.zip" -kL https://github.com/Takakiriy/escape_sed/archive/refs/heads/master.zip 
+        rm -rf  "escape_sed-master"  #// No need to run when installing for the first time
         unzip -o escape_sed.zip
-        mv  escape_sed-master  escape_sed  #// The folder extracted from the Zip file
-        cd  escape_sed
+        cd  "escape_sed-master"
 
         npm install --only=production
 
     Make the script file in the PATH folder to start escape_sed:
-        cd escape_sed  #// The folder extracted from the Zip file
         script="$HOME/bin/escape_sed"
-        rm -f "${script}"  #// When you are updating
-        echo "export  NODE_PATH=$(pwd)/node_modules" >> "${script}"
-        echo "node  $(pwd)/build/escape_sed.js \"\$@\"" >> "${script}"
-        chmod +x "${script}"
+        cd "${HOME}/Downloads/escape_sed-master"  #// The folder extracted from the Zip file
+        mkdir -p "${HOME}/bin"
+        rm -f  "${script}"  #// No need to run when installing for the first time
+        echo  "export  NODE_PATH=\"$(pwd)/node_modules\"" >> "${script}"
+        echo  "node  $(pwd)/build/escape_sed.js \"\$@\"" >> "${script}"
+        chmod +x  "${script}"
+        unset script
+
+    Check to use escape_sed command:
+        escape_sed --version
+
+
+### For CentOS 7
+
+    Install Node.js:
+        - https://nodejs.org/ja/download/ >> (click 64-bit at the right of) Linux Binaries (x64) >>
+            Copy the link
+        #// Case of version 14.17.6
+        - cd ${HOME}
+        - curl -L -O https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-x64.tar.xz
+        - tar -Jxvf  node-v14.17.6-linux-x64.tar.xz
+        - rm  node-v14.17.6-linux-x64.tar.xz
+        - sudo mv  node-v14.17.6-linux-x64  /opt
+        - cd /opt
+        - sudo ln -s  node-v14.17.6-linux-x64  node  #// You can skip if you use old and new versions and not use primarily
+        - cd ${HOME}
+        - PATH=/opt/node/bin:$PATH
+        - node --version
+        - echo 'export PATH="/opt/node/bin:$PATH"' >> ~/.bashrc
+
+    If there is your machine in the LAN with the proxy in the company and so on:
+        npm config -g set proxy "http://___.___.___.___:____"
+        npm config -g set https-proxy "http://___.___.___.___:____"
+
+    Download and expand escape_sed and install Node.js packages used by escape_sed:
+        sudo yum install unzip  #// unzip が使えないとき
+        mkdir -p ~/Downloads
+        cd  ~/Downloads
+        curl -L -O https://github.com/Takakiriy/escape_sed/archive/refs/heads/master.zip
+        rm -f  "escape_sed.zip"  #// No need to run when installing for the first time
+        mv  "master.zip"  "escape_sed.zip"
+        rm -rf  "escape_sed-master"  #// No need to run when installing for the first time
+        unzip -o  "escape_sed.zip"
+        cd  "escape_sed-master"
+
+    Create a bash script file that launches escape_sed into the folder where PATH passed:
+        script="${HOME}/bin/escape_sed"
+        cd  "${HOME}/Downloads/escape_sed-master"  #// The folder extracted from the Zip file
+        mkdir -p "${HOME}/bin"
+        rm -f  "${script}"  #// No need to run when installing for the first time
+
+        echo  "export  NODE_PATH=\"$(pwd)/node_modules\"" >> "${script}"
+        echo  "node  $(pwd)/build/escape_sed.js \"\$@\"" >> ${script}
+        chmod +x  "${script}"
         unset script
 
     Check to use escape_sed command:

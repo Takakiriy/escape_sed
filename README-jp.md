@@ -10,6 +10,7 @@
   - [インストール](#インストール)
     - [Windows の場合](#windows-の場合)
     - [mac の場合](#mac-の場合)
+    - [CentOS 7 の場合](#centos-7-の場合)
   - [（開発者用） 開発環境の構築手順](#開発者用-開発環境の構築手順)
     - [Windows の場合](#windows-の場合-1)
     - [mac の場合](#mac-の場合-1)
@@ -25,9 +26,9 @@
 escape_sed をインストールしてから、シェルで実行します。
 
     $ escape_sed
-    lineNum>12
-    before>ab
-    after>cd
+    lineNum> 12
+    before> ab
+    after > cd
 
     # line: 12
     # before: ab
@@ -48,15 +49,15 @@ escape_sed を使うには Node.js のインストールが必要です。
 
     社内など、プロキシがある LAN に Windows がある場合:
         Windows スタート >> PowerShell（と入力）:
-            npm config -g set proxy "http://___.___.___.___:____"
-            npm config -g set https-proxy "http://___.___.___.___:____"
+            - npm config -g set proxy "http://___.___.___.___:____"
+            - npm config -g set https-proxy "http://___.___.___.___:____"
 
     escape_sed をダウンロードして展開し、escape_sed が使う Node.js パッケージをインストールします:
         Windows スタート >> PowerShell（と入力）:
-            cd  ${env:USERPROFILE}\Downloads
-            Invoke-WebRequest  https://github.com/Takakiriy/escape_sed/archive/refs/heads/master.zip -OutFile escape_sed.zip
-            rm -r -fo  "escape_sed-master"  #// 更新するとき
-            Expand-Archive -Path escape_sed.zip -DestinationPath "."
+            cd  "${env:USERPROFILE}\Downloads"
+            Invoke-WebRequest  https://github.com/Takakiriy/escape_sed/archive/refs/heads/master.zip -OutFile "escape_sed.zip"
+            rm -r -fo  "escape_sed-master"  #// 初めてインストールするときは実行不要です
+            Expand-Archive -Path "escape_sed.zip"  -DestinationPath "."
             cd  "escape_sed-master"
 
             npm install --only=production
@@ -64,10 +65,10 @@ escape_sed を使うには Node.js のインストールが必要です。
     PowerShell を使う場合:
         PowerShell の PATH が通ったフォルダーに escape_sed を起動する PS1 スクリプト ファイル を作ります:
             Windows スタート >> PowerShell（と入力） :
+                ${script} = "${env:USERPROFILE}\AppData\Local\Microsoft\WindowsApps\escape_sed.ps1"
                 cd  ${env:USERPROFILE}\Downloads\escape_sed-master
                 ${current_folder} = Convert-Path "."
                 ${escape_sed_folder} = "${env:USERPROFILE}\Documents\escape_sed"
-                ${script} = "${env:USERPROFILE}\AppData\Local\Microsoft\WindowsApps\escape_sed.ps1"
 
                 echo  "`${env:NODE_PATH} = `"${current_folder}\node_modules`"" > ${script}
                 echo  "node  ${current_folder}\build\escape_sed.js `$PsBoundParameters.Values `$args" >> ${script}
@@ -83,13 +84,12 @@ escape_sed を使うには Node.js のインストールが必要です。
             - 他のインストール オプションはデフォルトを使用
         PATH が通ったフォルダーに escape_sed を起動する bash スクリプト ファイル を作ります:
             フォルダーを右クリック >> Git bash :
+                script="${HOME}/bin/escape_sed"
                 cd  ${HOME}/Downloads/escape_sed-master
                 current_folder="$(pwd)"
-                escape_sed_folder="${HOME}/Documents/escape_sed"
-                script="${HOME}/bin/escape_sed"
                 mkdir -p "${HOME}/bin"
 
-                echo  "export NODE_PATH=\"${HOME}/AppData/Roaming/npm/node_modules\"" > ${script}
+                echo  "export  NODE_PATH=\"${HOME}/AppData/Roaming/npm/node_modules\"" > ${script}
                 echo  "node  ${current_folder}/build/escape_sed.js \"\$@\"" >> ${script}
 
     escape_sed が使えることを確認します:
@@ -105,24 +105,72 @@ escape_sed を使うには Node.js のインストールが必要です。
 
     escape_sed をダウンロードして展開し、escape_sed が使う Node.js パッケージをインストールします:
         #// Launchpad >> Terminal
-        cd  ~/Downloads
+        cd  "${HOME}/Downloads"
         setopt interactivecomments
             #// enables comment symbol (#)
-        curl -o escape_sed.zip -kL https://github.com/Takakiriy/escape_sed/archive/refs/heads/master.zip 
-        rm -rf  escape_sed-old  &&  mv  escape_sed  escape_sed-old  #// 更新するとき
+        curl -o "escape_sed.zip" -kL https://github.com/Takakiriy/escape_sed/archive/refs/heads/master.zip 
+        rm -rf  "escape_sed-master"  #// 初めてインストールするときは実行不要です
         unzip -o escape_sed.zip
-        mv  escape_sed-master  escape_sed  #// Zip ファイルを展開したフォルダー
-        cd  escape_sed
+        cd  "escape_sed-master"
 
         npm install --only=production
 
     PATH が通ったフォルダーに escape_sed を起動する スクリプト ファイル を作ります:
-        cd escape_sed  #// Zip ファイルを展開したフォルダー
         script="$HOME/bin/escape_sed"
-        rm -f "${script}"  #// 更新するとき
-        echo "export  NODE_PATH=$(pwd)/node_modules" >> "${script}"
-        echo "node  $(pwd)/build/escape_sed.js \"\$@\"" >> "${script}"
-        chmod +x "${script}"
+        cd "${HOME}/Downloads/escape_sed-master"  #// Zip ファイルを展開したフォルダー
+        mkdir -p "${HOME}/bin"
+        rm -f  "${script}"  #// 初めてインストールするときは実行不要です
+        echo  "export  NODE_PATH=\"$(pwd)/node_modules\"" >> "${script}"
+        echo  "node  $(pwd)/build/escape_sed.js \"\$@\"" >> "${script}"
+        chmod +x  "${script}"
+        unset script
+
+    escape_sed が使えることを確認します:
+        escape_sed --version
+
+
+### CentOS 7 の場合
+
+    Node.js をインストールします:
+        - https://nodejs.org/ja/download/ >> (click 64-bit at the right of) Linux Binaries (x64) >>
+            Copy the link
+        #// Case of version 14.17.6
+        - cd ${HOME}
+        - curl -L -O https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-x64.tar.xz
+        - tar -Jxvf  node-v14.17.6-linux-x64.tar.xz
+        - rm  node-v14.17.6-linux-x64.tar.xz
+        - sudo mv  node-v14.17.6-linux-x64  /opt
+        - cd /opt
+        - sudo ln -s  node-v14.17.6-linux-x64  node  #// 新旧バージョンと共存し、主に使わないときは不要
+        - cd ${HOME}
+        - PATH=/opt/node/bin:$PATH
+        - node --version
+        - echo 'export PATH="/opt/node/bin:$PATH"' >> ~/.bashrc
+
+    社内など、プロキシがある LAN にある場合:
+        npm config -g set proxy "http://___.___.___.___:____"
+        npm config -g set https-proxy "http://___.___.___.___:____"
+
+    escape_sed をダウンロードして展開し、escape_sed が使う Node.js パッケージをインストールします:
+        sudo yum install unzip  #// unzip が使えないとき
+        mkdir -p ~/Downloads
+        cd  ~/Downloads
+        curl -L -O https://github.com/Takakiriy/escape_sed/archive/refs/heads/master.zip
+        rm -f  "escape_sed.zip"  #// 初めてインストールするときは実行不要です
+        mv  "master.zip"  "escape_sed.zip"
+        rm -rf  "escape_sed-master"  #// 初めてインストールするときは実行不要です
+        unzip -o  "escape_sed.zip"
+        cd  "escape_sed-master"
+
+    PATH が通ったフォルダーに escape_sed を起動する bash スクリプト ファイル を作ります:
+        script="${HOME}/bin/escape_sed"
+        cd  "${HOME}/Downloads/escape_sed-master"  #// Zip ファイルを展開したフォルダー
+        mkdir -p "${HOME}/bin"
+        rm -f  "${script}"  #// 初めてインストールするときは実行不要です
+
+        echo  "export  NODE_PATH=\"$(pwd)/node_modules\"" >> "${script}"
+        echo  "node  $(pwd)/build/escape_sed.js \"\$@\"" >> ${script}
+        chmod +x  "${script}"
         unset script
 
     escape_sed が使えることを確認します:

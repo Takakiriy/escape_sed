@@ -10,12 +10,15 @@ export async function  main() {
         locale = programOptions.locale;
     }
 
-    let  lineNum = await lib.input('lineNum>');
-    let  before = await lib.input('before>');
-    let  after = await lib.input('after>');
+    let  lineNum = await lib.input('lineNum> ');
+    let  before = await lib.input('before> ');
+    let  after = await lib.input('after > ');
     console.log('');
     if (lineNum) {
         console.log(`# line: ${lineNum}`);
+        if (lineNum[0] === '+'  ||  lineNum[0] === '-') {
+            lineNum = '$((${line_num} '+ lineNum[0] +' '+ lineNum.substring(1) +'))';
+        }
         lineNum += ' ';
     }
     console.log(`# before: ${before}`);

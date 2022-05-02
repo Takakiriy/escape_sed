@@ -1,4 +1,4 @@
-lineNum> before> after > 
+﻿lineNum> before> after > 
 # before: abc
 # after:  ABC
 _c="$(sed "s/abc/ABC/g"  "${file_path}" )";  echo "$_c" > "${file_path}";  unset _c

@@ -1,0 +1,5 @@
+﻿lineNum> before> after > 
+# line: +0
+# before: abc
+# after:  ABC
+_c="$(sed "$((${line_num} + 0)) s/abc/ABC/g"  "${file_path}" )";  echo "$_c" > "${file_path}";  unset _c

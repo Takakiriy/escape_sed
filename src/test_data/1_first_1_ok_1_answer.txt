@@ -1,4 +1,4 @@
-﻿lineNum>before>after>
+﻿lineNum> before> after > 
 # line: 12
 # before: \n
 # after:  \r\n

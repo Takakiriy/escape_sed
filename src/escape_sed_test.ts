@@ -20,26 +20,53 @@ async function  main() {
 // TestOfFirst
 async function  TestOfFirst() {
 	let  returns: ProcessReturns;
+	const  testCases = [
+		{
+			name: 'lineNum',
+			inputLines: [
+				'12',
+				'\\n',
+				'\\r\\n'
+			],
+			fileName: "1_first_1_ok_1_answer.txt",
+		},
+		{
+			name: 'without lineNum',
+			inputLines: [
+				'',
+				'abc',
+				'ABC'
+			],
+			fileName: "2_without_lineNum_1_ok_1_answer.txt",
+		},
+		{
+			name: 'plus lineNum',
+			inputLines: [
+				'+0',
+				'abc',
+				'ABC'
+			],
+			fileName: "3_plus_lineNum_1_ok_1_answer.txt",
+		},
+	];
+	for (const case_ of testCases) {
 
-    console.log(`TestCase: TestOfFirst`);
+		console.log(`TestCase: TestOfFirst >> ${case_.name}`);
 
-    // Test Main
-    returns = await callChildProccess(`node ${scriptPath} --test --locale en-US`,
-        {inputLines: [
-			'12',
-            '\\n',
-            '\\r\\n'
-        ]}
-    );
-    const  answer = fs.readFileSync(testFolderPath + "1_first_1_ok_1_answer.txt")
-        .toString().substring(cutBOM);
+		// Test Main
+		returns = await callChildProccess(`node ${scriptPath} --test --locale en-US`,
+			{inputLines: case_.inputLines}
+		);
+		const  answer = fs.readFileSync(testFolderPath + case_.fileName)
+			.toString().substring(cutBOM);
 
-    // Check
-    if (returns.stdout !== answer) {
-        printDifferentPaths(`_output.txt`, '1_first_1_ok_1_answer.txt');
-        fs.writeFileSync(testFolderPath + "_output.txt", returns.stdout);
-        throw new Error();
-    }
+		// Check
+		if (returns.stdout !== answer) {
+			printDifferentPaths(`_output.txt`, case_.fileName);
+			fs.writeFileSync(testFolderPath + "_output.txt", returns.stdout);
+			throw new Error();
+		}
+	}
 }
 
 // deleteFile
