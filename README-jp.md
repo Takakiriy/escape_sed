@@ -162,6 +162,8 @@ escape_sed を使うには Node.js のインストールが必要です。
         unzip -o  "escape_sed.zip"
         cd  "escape_sed-master"
 
+        npm install --only=production
+
     PATH が通ったフォルダーに escape_sed を起動する bash スクリプト ファイル を作ります:
         script="${HOME}/bin/escape_sed"
         cd  "${HOME}/Downloads/escape_sed-master"  #// Zip ファイルを展開したフォルダー

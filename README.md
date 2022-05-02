@@ -163,6 +163,8 @@ To use escape_sed, you must install Node.js.
         unzip -o  "escape_sed.zip"
         cd  "escape_sed-master"
 
+        npm install --only=production
+
     Create a bash script file that launches escape_sed into the folder where PATH passed:
         script="${HOME}/bin/escape_sed"
         cd  "${HOME}/Downloads/escape_sed-master"  #// The folder extracted from the Zip file
